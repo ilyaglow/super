@@ -14,6 +14,7 @@ import (
 	"github.com/brimdata/super/api/client"
 	"github.com/brimdata/super/cli"
 	"github.com/brimdata/super/cli/logflags"
+	"github.com/brimdata/super/cli/runtimeflags"
 	"github.com/brimdata/super/cmd/super/db"
 	"github.com/brimdata/super/cmd/super/internal/lakemanage"
 	"github.com/brimdata/super/lake/api"
@@ -64,6 +65,7 @@ type Command struct {
 	manage          time.Duration
 	portFile        string
 	rootContentFile string
+	runtimeFlags    runtimeflags.Flags
 }
 
 func New(parent charm.Command, f *flag.FlagSet) (charm.Command, error) {
@@ -71,6 +73,7 @@ func New(parent charm.Command, f *flag.FlagSet) (charm.Command, error) {
 	c.conf.Auth.SetFlags(f)
 	c.conf.Version = cli.Version()
 	c.logflags.SetFlags(f)
+	c.runtimeFlags.SetFlags(f)
 	f.IntVar(&c.brimfd, "brimfd", -1, "pipe read fd passed by Zui to signal Zui closure")
 	f.Func("cors.origin", "CORS allowed origin (may be repeated)", func(s string) error {
 		c.conf.CORSAllowedOrigins = append(c.conf.CORSAllowedOrigins, s)
